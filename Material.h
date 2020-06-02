@@ -2,10 +2,6 @@
 
 class Material
 {
-private:
-	GLint diffuseTex;
-	GLint specularTex;
-
 public:
 	Material(
 	glm::vec3 ambient,
@@ -36,4 +32,6 @@ public:
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
+	GLint diffuseTex;
+	GLint specularTex;
 };

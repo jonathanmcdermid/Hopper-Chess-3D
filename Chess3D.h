@@ -2,8 +2,9 @@
 
 #include "libs.h"
 
-enum shader_enum { SHADER_CORE_PROGRAM = 0 , SHADER_TEXT};
-enum material_enum { MATERIAL_PIECE_BLACK = 64, MATERIAL_PIECE_WHITE};
+enum shader_enum { SHADER_CORE_PROGRAM = 0, SHADER_TEXT };
+enum material_enum { MATERIAL_PIECE_BLACK = 64, MATERIAL_PIECE_WHITE };
+enum texture_enum { TEXTURE_PIECE = 0, TEXTURE_TILE_BLACK = 6, TEXTURE_TILE_WHITE, TEXTURE_TILE_HIGHLIGHT };
 
 class Chess3D
 {

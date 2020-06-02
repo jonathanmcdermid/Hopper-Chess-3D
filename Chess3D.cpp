@@ -108,6 +108,9 @@ void Chess3D::initTextures()
 	this->textures.push_back(new Texture("images/RookDiffuse.png", GL_TEXTURE_2D));
 	this->textures.push_back(new Texture("images/QueenDiffuse.png", GL_TEXTURE_2D));
 	this->textures.push_back(new Texture("images/KingDiffuse.png", GL_TEXTURE_2D));
+	this->textures.push_back(new Texture("images/b_tile.png", GL_TEXTURE_2D));
+	this->textures.push_back(new Texture("images/w_tile.png", GL_TEXTURE_2D));
+	this->textures.push_back(new Texture("images/highlight_tile.png", GL_TEXTURE_2D));
 }
 
 void Chess3D::initTexts()
@@ -120,9 +123,9 @@ void Chess3D::initMaterials()
 	for (int i = 0; i < SPACES; ++i)
 	{
 		if ((i + i / WIDTH) % 2)
-			this->materials.push_back(new Material(glm::vec3(0.2f), glm::vec3(0.2f), glm::vec3(0.3f), 0, 1));
+			this->materials.push_back(new Material(glm::vec3(0.0f), glm::vec3(1.f), glm::vec3(0.3f), 0.f, 1));
 		else
-			this->materials.push_back(new Material(glm::vec3(0.2f), glm::vec3(1.f), glm::vec3(0.3f), 0, 1));
+			this->materials.push_back(new Material(glm::vec3(0.0f), glm::vec3(1.f), glm::vec3(0.3f), 0.f, 1));
 	}
 	this->materials.push_back(new Material(glm::vec3(0.15f), glm::vec3(0.4f), glm::vec3(1.f), 1, 1));
 	this->materials.push_back(new Material(glm::vec3(0.5f), glm::vec3(1.f), glm::vec3(1.f), 1, 1));
@@ -137,9 +140,7 @@ void Chess3D::initModels()
 			glm::vec3(0.f, 0.f, 0.f),
 			glm::vec3(0.f),
 			glm::vec3(0.f),
-			glm::vec3(1.f)
-		)
-	);
+			glm::vec3(1.f)));
 
 	for (int i = 0; i < SPACES; ++i) 
 	{
@@ -148,8 +149,8 @@ void Chess3D::initModels()
 			this->models.push_back(new Model(
 				glm::vec3((float)(i % WIDTH + 1), 0.f, (float)(i / WIDTH)),
 				this->materials[i],
-				this->textures[0],
-				this->textures[0],
+				this->textures[TEXTURE_TILE_BLACK],
+				this->textures[TEXTURE_TILE_HIGHLIGHT],
 				tile_mesh));
 		}
 		else 
@@ -157,8 +158,8 @@ void Chess3D::initModels()
 			this->models.push_back(new Model(
 				glm::vec3((float)(i % WIDTH + 1), 0.f, (float)(i / WIDTH)),
 				this->materials[i],
-				this->textures[0],
-				this->textures[0],
+				this->textures[TEXTURE_TILE_WHITE],
+				this->textures[TEXTURE_TILE_HIGHLIGHT],
 				tile_mesh));
 		}
 	}
@@ -517,42 +518,39 @@ void Chess3D::updateKeyboardInput()
 void Chess3D::selectTiles(bool undo)
 {
 	int i;
-	float colourChange = 3;
-	float frames = 1;
-	for (int j = 0; j < frames; ++j) 
+	int shift = 1;
+	switch (this->moveString.length())
 	{
-		switch (this->moveString.length())
-		{
-		case 1:
-			for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
-				this->materials[i]->diffuse += (undo) ? -colourChange : colourChange;
-			break;
-		case 2:
-			for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
-				this->materials[i]->diffuse += (undo) ? colourChange : -colourChange;
-			i = this->moveString.at(0) - 'a' + (8 - this->moveString.at(1) + '0') * WIDTH;
-			this->materials[i]->diffuse += (undo) ? -colourChange : colourChange;
-			break;
-		case 3:
-			for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH) 
-				this->materials[i]->diffuse += (undo) ? -colourChange : colourChange;
-			break;
-		case 4:
-			for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH) 
-				this->materials[i]->diffuse += (undo) ? colourChange : -colourChange;
-			i = this->moveString.at(2) - 'a' + (8 - this->moveString.at(3) + '0') * WIDTH;
-			this->materials[i]->diffuse += (undo) ? -colourChange : colourChange;
-			break;
-		case 5:
-			i = this->moveString.at(0) - 'a' + (8 - this->moveString.at(1) + '0') * WIDTH;
-			this->materials[i]->diffuse += (undo) ? colourChange : -colourChange;
-			i = this->moveString.at(2) - 'a' + (8 - this->moveString.at(3) + '0') * WIDTH;
-			this->materials[i]->diffuse += (undo) ? colourChange : -colourChange;
-			break;
-		}
-		if(!undo)
-			render();
+	case 1:
+		for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		break;
+	case 2:
+		for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
+
+		i = this->moveString.at(0) - 'a' + (8 - this->moveString.at(1) + '0') * WIDTH;
+		this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		break;
+	case 3:
+		for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		break;
+	case 4:
+		for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
+		i = this->moveString.at(2) - 'a' + (8 - this->moveString.at(3) + '0') * WIDTH;
+		this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		break;
+	case 5:
+		i = this->moveString.at(0) - 'a' + (8 - this->moveString.at(1) + '0') * WIDTH;
+		this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
+		i = this->moveString.at(2) - 'a' + (8 - this->moveString.at(3) + '0') * WIDTH;
+		this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
+		break;
 	}
+	if (!undo)
+		render();
 }
 
 void Chess3D::initMove(int from, int to)

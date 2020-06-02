@@ -6,12 +6,12 @@ class Model
 {
 private:
 	Material* material;
-	Texture* overrideTextureDiffuse;
-	Texture* overrideTextureSpecular;
 	std::vector<Mesh*> meshes;
 	glm::vec3 position;
-
 public:
+	Texture* overrideTextureDiffuse;
+	Texture* overrideTextureSpecular;
+
 	Model(
 		glm::vec3 position,
 		Material* material,
