@@ -123,9 +123,9 @@ void Chess3D::initMaterials()
 	for (int i = 0; i < SPACES; ++i)
 	{
 		if ((i + i / WIDTH) % 2)
-			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0.f, 1));
+			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0, 1));
 		else
-			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0.f, 1));
+			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0, 1));
 	}
 	this->materials.push_back(new Material(glm::vec3(0.05f), glm::vec3(0.4f), glm::vec3(1.f), 1, 1));
 	this->materials.push_back(new Material(glm::vec3(0.5f), glm::vec3(1.f), glm::vec3(1.f), 1, 1));
@@ -176,7 +176,7 @@ void Chess3D::initModels()
 		return;
 	}
 
-	for (size_t i = 0; i < SPACES; ++i) 
+	for (int i = 0; i < SPACES; ++i) 
 	{
 		switch (abs(this->ifx->game.grid[i])) 
 		{
@@ -210,7 +210,7 @@ void Chess3D::initModels()
 		this->models.push_back(new Model(
 			glm::vec3((float)(i % WIDTH), 0.f, (float)(i / WIDTH)),
 			(this->ifx->game.grid[i] > 0) ? glm::vec3(0.f) : glm::vec3(180.f, 0, 180.f),
-			this->materials[MATERIAL_PIECE_BLACK + (this->ifx->game.grid[i] > 0)],
+			this->materials[MATERIAL_PIECE_BLACK + (int) (this->ifx->game.grid[i] > 0)],
 			this->textures[index],
 			this->textures[index],
 			fString.c_str()));

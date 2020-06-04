@@ -3,10 +3,10 @@
 #include FT_FREETYPE_H
 
 struct FT_Character {
-	unsigned int TextureID = 0;	// ID handle of the glyph texture
-	glm::ivec2 Size;			// Size of glyph
-	glm::ivec2 Bearing;			// Offset from baseline to left/top of glyph
-	unsigned int Advance = 0;	// Offset to advance to next glyph
+	unsigned int TextureID;	// ID handle of the glyph texture
+	glm::ivec2 Size;		// Size of glyph
+	glm::ivec2 Bearing;		// Offset from baseline to left/top of glyph
+	unsigned int Advance;	// Offset to advance to next glyph
 };
 
 class Text
