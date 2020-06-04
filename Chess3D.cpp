@@ -93,8 +93,8 @@ void Chess3D::initMatrices()
 
 void Chess3D::initShaders()
 {
-	this->shaders.push_back(new Shader(this->GL_VERSION_MAJOR, this->GL_VERSION_MINOR, (char*)"vertex_core.glsl", (char*)"fragment_core.glsl"));
-	this->shaders.push_back(new Shader(this->GL_VERSION_MAJOR, this->GL_VERSION_MINOR, (char*)"text.vs", (char*)"text.fs"));
+	this->shaders.push_back(new Shader(this->GL_VERSION_MAJOR, this->GL_VERSION_MINOR, (char*)"shaders/vertex_core.glsl", (char*)"shaders/fragment_core.glsl"));
+	this->shaders.push_back(new Shader(this->GL_VERSION_MAJOR, this->GL_VERSION_MINOR, (char*)"shaders/text.vs", (char*)"shaders/text.fs"));
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
 	shaders[SHADER_TEXT]->use();
 	glUniformMatrix4fv(glGetUniformLocation(shaders[SHADER_TEXT]->getID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -123,22 +123,24 @@ void Chess3D::initMaterials()
 	for (int i = 0; i < SPACES; ++i)
 	{
 		if ((i + i / WIDTH) % 2)
-			this->materials.push_back(new Material(glm::vec3(0.0f), glm::vec3(1.f), glm::vec3(0.3f), 0.f, 1));
+			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0.f, 1));
 		else
-			this->materials.push_back(new Material(glm::vec3(0.0f), glm::vec3(1.f), glm::vec3(0.3f), 0.f, 1));
+			this->materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.3f), glm::vec3(0.f), 0.f, 1));
 	}
-	this->materials.push_back(new Material(glm::vec3(0.15f), glm::vec3(0.4f), glm::vec3(1.f), 1, 1));
+	this->materials.push_back(new Material(glm::vec3(0.05f), glm::vec3(0.4f), glm::vec3(1.f), 1, 1));
 	this->materials.push_back(new Material(glm::vec3(0.5f), glm::vec3(1.f), glm::vec3(1.f), 1, 1));
+
 }
 
 void Chess3D::initModels()
 {
 	std::vector<Mesh*>tile_mesh;
+
 	tile_mesh.push_back(
 		new Mesh(
 			&Quad(),
+			glm::vec3(1.f, 0.f, 0.f),
 			glm::vec3(0.f, 0.f, 0.f),
-			glm::vec3(0.f),
 			glm::vec3(0.f),
 			glm::vec3(1.f)));
 
@@ -147,7 +149,7 @@ void Chess3D::initModels()
 		if ((i + i / WIDTH) % 2) 
 		{
 			this->models.push_back(new Model(
-				glm::vec3((float)(i % WIDTH + 1), 0.f, (float)(i / WIDTH)),
+				glm::vec3((float)(i % WIDTH), 0.f, (float)(i / WIDTH)),
 				this->materials[i],
 				this->textures[TEXTURE_TILE_BLACK],
 				this->textures[TEXTURE_TILE_HIGHLIGHT],
@@ -156,7 +158,7 @@ void Chess3D::initModels()
 		else 
 		{
 			this->models.push_back(new Model(
-				glm::vec3((float)(i % WIDTH + 1), 0.f, (float)(i / WIDTH)),
+				glm::vec3((float)(i % WIDTH), 0.f, (float)(i / WIDTH)),
 				this->materials[i],
 				this->textures[TEXTURE_TILE_WHITE],
 				this->textures[TEXTURE_TILE_HIGHLIGHT],
@@ -165,75 +167,40 @@ void Chess3D::initModels()
 	}
 
 	std::string fString;
-	int side, index;
+	int index;
 
 	if (this->ifx == nullptr)
 	{
 		std::cout << "ERROR::INTERFACE NOT INITIALIZED\n";
 		glfwTerminate();
+		return;
 	}
 
 	for (size_t i = 0; i < SPACES; ++i) 
 	{
-		switch (this->ifx->game.grid[i]) 
+		switch (abs(this->ifx->game.grid[i])) 
 		{
-		case B_PAWN:
-			side = BLACK;
-			fString = "objects/pawn.obj";
-			index = PINDEX;
-			break;
-		case B_KNIGHT:
-			side = BLACK;
-			fString = "objects/b_knight.obj";
-			index = NINDEX;
-			break;
-		case B_BISHOP:
-			side = BLACK;
-			fString = "objects/b_bishop.obj";
-			index = BINDEX;
-			break;
-		case B_ROOK:
-			side = BLACK;
-			fString = "objects/rook.obj";
-			index = RINDEX;
-			break;
-		case B_QUEEN:
-			side = BLACK;
-			fString = "objects/queen.obj";
-			index = QINDEX;
-			break;
-		case B_KING:
-			side = BLACK;
-			fString = "objects/king.obj";
-			index = KINDEX;
-			break;
 		case W_PAWN:
-			side = WHITE;
 			fString = "objects/pawn.obj";
 			index = PINDEX;
 			break;
 		case W_KNIGHT:
-			side = WHITE;
-			fString = "objects/w_knight.obj";
+			fString = "objects/knight.obj";
 			index = NINDEX;
 			break;
 		case W_BISHOP:
-			side = WHITE;
-			fString = "objects/w_bishop.obj";
+			fString = "objects/bishop.obj";
 			index = BINDEX;
 			break;
 		case W_ROOK:
-			side = WHITE;
 			fString = "objects/rook.obj";
 			index = RINDEX;
 			break;
 		case W_QUEEN:
-			side = WHITE;
 			fString = "objects/queen.obj";
 			index = QINDEX;
 			break;
 		case W_KING:
-			side = WHITE;
 			fString = "objects/king.obj";
 			index = KINDEX;
 			break;
@@ -242,7 +209,8 @@ void Chess3D::initModels()
 		}
 		this->models.push_back(new Model(
 			glm::vec3((float)(i % WIDTH), 0.f, (float)(i / WIDTH)),
-			this->materials[MATERIAL_PIECE_BLACK + side],
+			(this->ifx->game.grid[i] > 0) ? glm::vec3(0.f) : glm::vec3(180.f, 0, 180.f),
+			this->materials[MATERIAL_PIECE_BLACK + (this->ifx->game.grid[i] > 0)],
 			this->textures[index],
 			this->textures[index],
 			fString.c_str()));
@@ -402,7 +370,7 @@ void Chess3D::updateMouseInput()
 	this->lastMouseY = this->mouseY;
 
 	if(glfwGetInputMode(this->window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
-		this->camera.updateInput(dt, -1, this->mouseOffsetX, this->mouseOffsetY);
+		this->camera.updateInput(dt, -1, this->mouseOffsetX * this->fov / 90, this->mouseOffsetY * this->fov / 90);
 }
 
 void Chess3D::updateKeyboardInput()
@@ -522,23 +490,22 @@ void Chess3D::selectTiles(bool undo)
 	switch (this->moveString.length())
 	{
 	case 1:
-		for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
-			this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		/*for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex += (undo) ? -shift : shift;*/
 		break;
 	case 2:
-		for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
-			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
-
+		/*for (i = this->moveString.at(0) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;*/
 		i = this->moveString.at(0) - 'a' + (8 - this->moveString.at(1) + '0') * WIDTH;
 		this->materials[i]->diffuseTex += (undo) ? -shift : shift;
 		break;
 	case 3:
-		for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
-			this->materials[i]->diffuseTex += (undo) ? -shift : shift;
+		/*for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex += (undo) ? -shift : shift;*/
 		break;
 	case 4:
-		for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
-			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;
+		/*for (i = this->moveString.at(2) - 'a'; i < SPACES; i += WIDTH)
+			this->materials[i]->diffuseTex -= (undo) ? -shift : shift;*/
 		i = this->moveString.at(2) - 'a' + (8 - this->moveString.at(3) + '0') * WIDTH;
 		this->materials[i]->diffuseTex += (undo) ? -shift : shift;
 		break;
@@ -638,18 +605,12 @@ void Chess3D::finalizeMove()
 	case NPROMOTEC:
 		*this->trajectories[1].pModel = *this->models[this->models.size() - 1];
 		this->models.pop_back();
-		if (this->ifx->game.turn)
-			this->trajectories[0].pModel->update("objects/b_knight.obj");
-		else
-			this->trajectories[0].pModel->update("objects/w_knight.obj");
+		this->trajectories[0].pModel->update("objects/knight.obj");
 		break;
 	case BPROMOTEC:
 		*this->trajectories[1].pModel = *this->models[this->models.size() - 1];
 		this->models.pop_back();
-		if (this->ifx->game.turn)
-			this->trajectories[0].pModel->update("objects/b_bishop.obj");
-		else
-			this->trajectories[0].pModel->update("objects/w_bishop.obj");
+		this->trajectories[0].pModel->update("objects/bishop.obj");
 		break;
 	case RPROMOTEC:
 		*this->trajectories[1].pModel = *this->models[this->models.size() - 1];
@@ -662,16 +623,10 @@ void Chess3D::finalizeMove()
 		this->trajectories[0].pModel->update("objects/queen.obj");
 		break;
 	case NPROMOTE:
-		if (this->ifx->game.turn)
-			this->trajectories[0].pModel->update("objects/b_knight.obj");
-		else
-			this->trajectories[0].pModel->update("objects/w_knight.obj");
+		this->trajectories[0].pModel->update("objects/knight.obj");
 		break;
 	case BPROMOTE:
-		if (this->ifx->game.turn)
-			this->trajectories[0].pModel->update("objects/b_bishop.obj");
-		else
-			this->trajectories[0].pModel->update("objects/w_bishop.obj");
+		this->trajectories[0].pModel->update("objects/bishop.obj");
 		break;
 	case RPROMOTE:
 		this->trajectories[0].pModel->update("objects/rook.obj");
@@ -718,9 +673,7 @@ void Chess3D::update()
 	else
 	{
 		if (this->ifx->game.turn)
-		{
 			this->updateInput();
-		}
 		else
 		{
 			this->ifx->botMove();
@@ -759,7 +712,7 @@ void Chess3D::displayGameOver()
 	else if (this->ifx->game.threatened[WHITE][this->ifx->game.kpos[BLACK]])
 		this->texts[0]->RenderText(*this->shaders[SHADER_TEXT], "WHITE MATES",
 			WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.90f, 1.f, glm::vec3(1.f, 1.f, 1.f));
-	else 
+	else
 		this->texts[0]->RenderText(*this->shaders[SHADER_TEXT], "DRAW",
 			WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5f, 1.f, glm::vec3(1.f, 1.f, 1.f));
 }
@@ -768,13 +721,14 @@ void Chess3D::render()
 {
 	glClearColor(0.f, 0.f, 0.f, 0.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	if(this->showInfo)
+	if (this->showInfo)
 		this->displayInfo();
+
 	if (this->gameOver)
 		this->displayGameOver();
 	this->updateUniforms();
-	for (auto& i : this->models)
-		i->render(this->shaders[SHADER_CORE_PROGRAM]);
+	for (int i = 0 ; i < this->models.size(); ++i)
+		this->models[i]->render(this->shaders[SHADER_CORE_PROGRAM]);
 	glfwSwapBuffers(this->window);
 	glFlush();
 	glBindVertexArray(0);

@@ -16,15 +16,18 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{b2c24516-9c84-4a1d-ba0f-a0e66a2413fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{cc6a9653-5476-4d1d-9443-fa55260dad10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Images">
+      <UniqueIdentifier>{70893e75-6b73-4b99-8a26-00b81fcb13f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OBJLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -57,20 +60,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="fragment_core.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="text.fs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="text.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="vertex_core.glsl">
-      <Filter>Shaders</Filter>
-    </None>
+    <ClInclude Include="Primitives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,5 +71,74 @@
     <ClCompile Include="Chess3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="objects\king.obj">
+      <Filter>Objects</Filter>
+    </Object>
+    <Object Include="objects\pawn.obj">
+      <Filter>Objects</Filter>
+    </Object>
+    <Object Include="objects\queen.obj">
+      <Filter>Objects</Filter>
+    </Object>
+    <Object Include="objects\rook.obj">
+      <Filter>Objects</Filter>
+    </Object>
+    <Object Include="objects\knight.obj">
+      <Filter>Objects</Filter>
+    </Object>
+    <Object Include="objects\bishop.obj">
+      <Filter>Objects</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\b_tile.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\banner.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\BishopDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\BoardDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\highlight_tile.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\KingDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\KnightDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\PawnDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\QueenDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\RookDiffuse.png">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="images\w_tile.png">
+      <Filter>Images</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\text.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\text.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\vertex_core.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\fragment_core.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

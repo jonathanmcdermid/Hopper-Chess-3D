@@ -37,6 +37,7 @@ public:
 
 	Model(
 		glm::vec3 position,
+		glm::vec3 rotation,
 		Material* material,
 		Texture* orTexDif,
 		Texture* orTexSpec,
@@ -57,6 +58,7 @@ public:
 
 		for (auto& i : this->meshes)
 		{
+			i->setRotation(rotation);
 			i->Move(this->position);
 			i->setOrigin(this->position);
 		}

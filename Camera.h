@@ -52,7 +52,7 @@ public:
 		this->updateCameraVectors();
 	}
 
-	~Camera() {}
+	~Camera() { ; }
 
 	const glm::mat4 getViewMatrix()
 	{
@@ -69,6 +69,11 @@ public:
 	const glm::vec3 getFront() const
 	{
 		return this->front;
+	}
+
+	const glm::vec3 getRight() const
+	{
+		return this->right;
 	}
 
 	void Move(const float& dt, const int direction)

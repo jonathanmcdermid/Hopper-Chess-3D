@@ -6,6 +6,7 @@ The following can be used as a guide for controlling the camera and pieces.
 
 Universal
 ```
+ESCAPE: End program
 P: Pause game, frees cursor so window can be resized or closed
 O: Resume game, locks cursor
 ```
@@ -21,7 +22,6 @@ E: Camera up
 -: Decrease FOV
 SPACE: Switch to move input mode
 I: Display information
-ESCAPE: End program
 ```
 Move Input Mode
 ```
