@@ -76,7 +76,7 @@ public:
 		return this->right;
 	}
 
-	void Move(const float& dt, const int direction)
+	void move(const float& dt, const int direction)
 	{
 		switch (direction)
 		{
@@ -107,10 +107,10 @@ public:
 		this->pitch += static_cast<GLfloat>(offsetY) * this->sensitivity * dt;
 		this->yaw += static_cast<GLfloat>(offsetX) * this->sensitivity * dt;
 
-		if (this->pitch > 80.f)
-			this->pitch = 80.f;
-		else if (this->pitch < -80.f)
-			this->pitch = -80.f;
+		if (this->pitch > 90.f)
+			this->pitch = 90.f;
+		else if (this->pitch < -90.f)
+			this->pitch = -90.f;
 
 		if (this->yaw > 360.f || this->yaw < -360.f)
 			this->yaw = 0.f;

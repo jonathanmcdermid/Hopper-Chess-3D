@@ -9,9 +9,8 @@ void Chess3D::dummyWindow()//hack to get GL version
 
 	GLFWwindow* window;
 	window = glfwCreateWindow(100, 100, "Dummy window", NULL, NULL);
-	if (window == NULL) {
+	if (window == NULL)
 		return;
-	}
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK)
 		return;
@@ -266,9 +265,9 @@ Chess3D::Chess3D(
 	this->framebufferWidth = this->WINDOW_WIDTH;
 	this->framebufferHeight = this->WINDOW_HEIGHT;
 
-	this->startCamPosition = glm::vec3(4.5f, 4.5f, 12.f);
+	this->startCamPosition = glm::vec3(4.5f, 11.5f, 15.f);
 	this->startWorldUp = glm::vec3(0.f, 1.f, 0.f);
-	this->startCamFront = glm::vec3(0.f, -1.f, -1.f);
+	this->startCamFront = glm::vec3(0.f, -1.f, 0.f);
 
 	this->fov = 25.f;
 	this->nearPlane = 0.1f;
@@ -287,6 +286,7 @@ Chess3D::Chess3D(
 	this->mouseY = 0.0;
 	this->mouseOffsetX = 0.0;
 	this->mouseOffsetY = 0.0;
+
 	this->firstMouse = true;
 	this->cameraMode = false;
 	this->showInfo = false;
@@ -389,17 +389,17 @@ void Chess3D::updateKeyboardInput()
 	if (this->cameraMode)
 	{
 		if (glfwGetKey(this->window, GLFW_KEY_W) == GLFW_PRESS)
-			this->camera.Move(this->dt, FORWARD);
+			this->camera.move(this->dt, FORWARD);
 		if (glfwGetKey(this->window, GLFW_KEY_S) == GLFW_PRESS)
-			this->camera.Move(this->dt, BACKWARD);
+			this->camera.move(this->dt, BACKWARD);
 		if (glfwGetKey(this->window, GLFW_KEY_A) == GLFW_PRESS)
-			this->camera.Move(this->dt, LEFT);
+			this->camera.move(this->dt, LEFT);
 		if (glfwGetKey(this->window, GLFW_KEY_D) == GLFW_PRESS)
-			this->camera.Move(this->dt, RIGHT);
+			this->camera.move(this->dt, RIGHT);
 		if (glfwGetKey(this->window, GLFW_KEY_E) == GLFW_PRESS)
-			this->camera.Move(this->dt, UP);
+			this->camera.move(this->dt, UP);
 		if (glfwGetKey(this->window, GLFW_KEY_Q) == GLFW_PRESS)
-			this->camera.Move(this->dt, DOWN);
+			this->camera.move(this->dt, DOWN);
 		if (glfwGetKey(this->window, GLFW_KEY_MINUS) == GLFW_PRESS)
 			this->fov -= 0.1f;
 		if (glfwGetKey(this->window, GLFW_KEY_EQUAL) == GLFW_PRESS)
@@ -678,28 +678,29 @@ void Chess3D::update()
 		{
 			this->ifx->botMove();
 			this->initMove(this->ifx->game.getCurrM().getFrom(), this->ifx->game.getCurrM().getTo());
+			this->dt = 0;
 		}
 	}
 }
 
 void Chess3D::displayInfo()
 {
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "Hopper Chess 3D",								
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.90f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "FPS: " + std::to_string(this->fps),
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.88f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "FOV: " + std::to_string(this->fov),
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.86f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "X: " + std::to_string(this->camera.getPosition().x),	
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.84f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "Y: " + std::to_string(this->camera.getPosition().y),	
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.82f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
-	this->texts[0]->RenderText(
+	this->texts[0]->renderText(
 		*this->shaders[SHADER_TEXT], "Z: " + std::to_string(this->camera.getPosition().z),	
 		WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.80f, 0.6f, glm::vec3(1.f, 1.f, 1.f));
 }
@@ -707,23 +708,22 @@ void Chess3D::displayInfo()
 void Chess3D::displayGameOver()
 {
 	if (this->ifx->game.threatened[BLACK][this->ifx->game.kpos[WHITE]])
-		this->texts[0]->RenderText(*this->shaders[SHADER_TEXT], "BLACK MATES",
+		this->texts[0]->renderText(*this->shaders[SHADER_TEXT], "BLACK MATES",
 			WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.90f, 1.f, glm::vec3(1.f, 1.f, 1.f));
 	else if (this->ifx->game.threatened[WHITE][this->ifx->game.kpos[BLACK]])
-		this->texts[0]->RenderText(*this->shaders[SHADER_TEXT], "WHITE MATES",
+		this->texts[0]->renderText(*this->shaders[SHADER_TEXT], "WHITE MATES",
 			WINDOW_WIDTH * 0.05f, WINDOW_HEIGHT * 0.90f, 1.f, glm::vec3(1.f, 1.f, 1.f));
 	else
-		this->texts[0]->RenderText(*this->shaders[SHADER_TEXT], "DRAW",
+		this->texts[0]->renderText(*this->shaders[SHADER_TEXT], "DRAW",
 			WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5f, 1.f, glm::vec3(1.f, 1.f, 1.f));
 }
 
 void Chess3D::render()
 {
-	glClearColor(0.f, 0.f, 0.f, 0.f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	if (this->showInfo)
 		this->displayInfo();
-
 	if (this->gameOver)
 		this->displayGameOver();
 	this->updateUniforms();
@@ -741,4 +741,3 @@ void Chess3D::framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
 {
 	glViewport(0, 0, fbW, fbH);
 };
-
