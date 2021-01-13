@@ -28,31 +28,6 @@ public:
 	inline const unsigned getNrOfIndices() { return (int) this->indices.size(); }
 };
 
-class Triangle : public Primitive
-{
-public:
-	Triangle()
-		: Primitive()
-	{
-		Vertex vertices[] =
-		{
-			//Position								//Color							//Texcoords					//Normals
-			glm::vec3(0.f, 0.5f, 0.f),				glm::vec3(1.f, 0.f, 1.f),		glm::vec2(0.5f, 1.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(-0.5f, -0.5f, 0.f),			glm::vec3(0.f, 1.f, 1.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(0.5f, -0.5f, 0.f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-		};
-		unsigned cVertices = sizeof(vertices) / sizeof(Vertex);
-
-		GLuint indices[] =
-		{
-			0, 1, 2	
-		};
-		unsigned cIndices = sizeof(indices) / sizeof(GLuint);
-
-		this->set(vertices, cVertices, indices, cIndices);
-	}
-};
-
 class Quad : public Primitive
 {
 public:
@@ -61,7 +36,7 @@ public:
 	{
 		Vertex vertices[] =
 		{
-			//Position								//Color							//Texcoords					//Normals
+			//Position								Color							Texcoords					Normals
 			glm::vec3(0.5f, 0.f, 0.5f),				glm::vec3(1.f, 1.f, 1.f),		glm::vec2(1.f, 1.f),		glm::vec3(0.f, 1.f, 0.f),
 			glm::vec3(0.5f, 0.f, -0.5f),			glm::vec3(1.f, 0.f, 1.f),		glm::vec2(0.f, 1.f),		glm::vec3(0.f, 1.f, 0.f),
 			glm::vec3(-0.5f, 0.f, -0.5f),			glm::vec3(0.f, 1.f, 1.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 1.f, 0.f),
@@ -73,82 +48,6 @@ public:
 		{
 			0, 1, 2,	//Triangle 1
 			0, 2, 3		//Triangle 2
-		};
-		unsigned cIndices = sizeof(indices) / sizeof(GLuint);
-
-		this->set(vertices, cVertices, indices, cIndices);
-	}
-};
-
-class Pyramid : public Primitive
-{
-public:
-	Pyramid()
-		: Primitive()
-	{
-		Vertex vertices[] =
-		{
-			//Position								//Color							//Texcoords					//Normals
-			//Triangle front
-			glm::vec3(0.f, 0.5f, 0.f),				glm::vec3(1.f, 0.f, 0.f),		glm::vec2(0.5f, 1.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(-0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 1.f, 0.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-
-			//Triangle left
-			glm::vec3(0.f, 0.5f, 0.f),				glm::vec3(1.f, 1.f, 0.f),		glm::vec2(0.5f, 1.f),		glm::vec3(-1.f, 0.f, 0.f),
-			glm::vec3(-0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(0.f, 0.f),		glm::vec3(-1.f, 0.f, 0.f),
-			glm::vec3(-0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(-1.f, 0.f, 0.f),
-
-			//Triangle back
-			glm::vec3(0.f, 0.5f, 0.f),				glm::vec3(1.f, 1.f, 0.f),		glm::vec2(0.5f, 1.f),		glm::vec3(0.f, 0.f, -1.f),
-			glm::vec3(0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 0.f, -1.f),
-			glm::vec3(-0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(0.f, 0.f, -1.f),
-
-			//Triangles right
-			glm::vec3(0.f, 0.5f, 0.f),				glm::vec3(1.f, 1.f, 0.f),		glm::vec2(0.5f, 1.f),		glm::vec3(1.f, 0.f, 0.f),
-			glm::vec3(0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(0.f, 0.f),		glm::vec3(1.f, 0.f, 0.f),
-			glm::vec3(0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(1.f, 0.f, 0.f),
-		};
-		unsigned cVertices = sizeof(vertices) / sizeof(Vertex);
-
-		this->set(vertices, cVertices, nullptr, 0);
-	}
-};
-
-class Cube : public Primitive
-{
-public:
-	Cube()
-		: Primitive()
-	{
-		Vertex vertices[] =
-		{
-			//Position								//Color							//Texcoords					//Normals
-			glm::vec3(-0.5f, 0.5f, 0.5f),			glm::vec3(1.f, 0.f, 0.f),		glm::vec2(0.f, 1.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(-0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 1.f, 0.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(0.5f, -0.5f, 0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(0.f, 0.f, 1.f),
-			glm::vec3(0.5f, 0.5f, 0.5f),			glm::vec3(1.f, 1.f, 0.f),		glm::vec2(1.f, 1.f),		glm::vec3(0.f, 0.f, 1.f),
-
-			glm::vec3(0.5f, 0.5f, -0.5f),			glm::vec3(1.f, 0.f, 0.f),		glm::vec2(0.f, 1.f),		glm::vec3(0.f, 0.f, -1.f),
-			glm::vec3(0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 1.f, 0.f),		glm::vec2(0.f, 0.f),		glm::vec3(0.f, 0.f, -1.f),
-			glm::vec3(-0.5f, -0.5f, -0.5f),			glm::vec3(0.f, 0.f, 1.f),		glm::vec2(1.f, 0.f),		glm::vec3(0.f, 0.f, -1.f),
-			glm::vec3(-0.5f, 0.5f, -0.5f),			glm::vec3(1.f, 1.f, 0.f),		glm::vec2(1.f, 1.f),		glm::vec3(0.f, 0.f, -1.f)
-		};
-		unsigned cVertices = sizeof(vertices) / sizeof(Vertex);
-
-		GLuint indices[] =
-		{
-			0, 1, 2,
-			0, 2, 3,
-
-			7, 6, 1,
-			7, 1, 0,
-
-			4, 5, 6,
-			4, 6, 7,
-
-			3, 2, 5,
-			3, 5, 4
 		};
 		unsigned cIndices = sizeof(indices) / sizeof(GLuint);
 

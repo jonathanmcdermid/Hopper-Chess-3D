@@ -23,12 +23,10 @@ in vec3 vs_normal;
 
 out vec4 fs_color;
 
-//Uniforms
 uniform Material material;
 uniform vec3 lightPos0;
 uniform vec3 cameraPos;
 
-//Functions
 vec3 calculateAmbient(Material material)
 {
 	return material.ambient;
@@ -57,21 +55,15 @@ vec3 calculateSpecular(Material material, vec3 vs_position, vec3 vs_normal, vec3
 void main()
 {
 	
-	//Ambient light
 	vec3 ambientFinal = calculateAmbient(material);
 
-	//Diffuse light
 	vec3 diffuseFinal = calculateDiffuse(material, vs_position, vs_normal, lightPos0);
 
-	//Specular light
 	vec3 specularFinal = calculateSpecular(material, vs_position, vs_normal, lightPos0, cameraPos);
 
-	//Attenuation
 	float distance = length(lightPos0 - vs_position);
-	//constant linear quadratic
 	float attenuation = 1.f / (1.f + 0.045f * distance + 0.0075f * (distance * distance));
 
-	//Final light
 	ambientFinal *= attenuation;
 	diffuseFinal *= attenuation;
 	specularFinal *= attenuation;
